@@ -1,5 +1,5 @@
 import sys
-sys.path.insert(0,'..')
+sys.path.insert(0,'.')
 import argparse
 import json
 import yaml
@@ -15,7 +15,6 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger()
 
 # constants and paths
-STOCKS_LIST = '../data/all_stocks.yml'
 MAX_TRACKED_PER_API = 400
 TWEET_ATTRS = ['id', 'text', 'created_at', 'in_reply_to_status_id',
                           'in_reply_to_user_id', 'retweeted_status_id', 'quoted_status_id', 'quote_count',
@@ -103,7 +102,8 @@ class TweetStreamListener(tweepy.StreamListener):
         user = tweet['user']
         self.insert_user(user)
         self.insert_tweet(tweet)
-        # store the retweeted tweet too
+
+        # store the quoted/retweeted tweet
         for type in ['quoted_status', 'retweeted_status']:
             if type in tweet:
                 self.insert_user(tweet[type]['user'])
@@ -116,14 +116,16 @@ class TweetStreamListener(tweepy.StreamListener):
         return True
 
 parser = argparse.ArgumentParser(description='Process some integers.')
-parser.add_argument('--db', type=str, help='The path to the SQLite db')
+parser.add_argument('--db', type=str, help='The path to the SQLite db.')
 parser.add_argument('--api', type=str, help='Twitter API credentials.')
+parser.add_argument('--stocks', type=str, help='Stocks list.')
 args = parser.parse_args()
 
 db = Db(args.db)
-db.reset_factory_tweets()
+if not len(db.get_tables()):
+    db.reset_factory_tweets()
 
-with open(STOCKS_LIST) as file:
+with open(args.stocks) as file:
     all_stocks = yaml.load(file, Loader=yaml.FullLoader)
 
 # Sort the stocks based on their market cap.

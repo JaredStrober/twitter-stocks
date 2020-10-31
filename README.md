@@ -14,5 +14,5 @@ For obtaining Twitter's API Keys and Access Tokens, please follow [this](https:/
 ```
 python twitter/stream_listener.py --db=stocks.db
                                   --api=data/creds.yml
-                                  --stocks=data/all_stocks.yml
+                                  --stocks=data/stocks.yml
 ```

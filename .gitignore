@@ -6,7 +6,5 @@ __pycache__/
 # Logs
 *.txt
 *.log
-# Configs
-*.yml
 # SQLite
 *.db

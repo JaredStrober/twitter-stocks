@@ -16,6 +16,14 @@ class Db:
             print(e)
         return conn
 
+    def get_tables(self):
+        conn = self.connect()
+        sql = "SELECT name FROM sqlite_master WHERE type='table';"
+        cur = conn.cursor()
+        cur.execute(sql)
+        rows = cur.fetchall()
+        return rows
+
     def create_table(self, name, columns):
         conn = self.connect()
         sql = 'CREATE TABLE %s (%s);'%(name, ', '.join(columns))
