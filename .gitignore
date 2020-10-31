@@ -1,0 +1,12 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+# Swap space files
+*.swp
+# Logs
+*.txt
+*.log
+# Configs
+*.yml
+# SQLite
+*.db
